@@ -175,4 +175,38 @@ if st.button("Run Governance Check"):
  * ✅ Identity Alignment: The AI cross-references requests with your core values.
  * ✅ Hard Safety: Immediate blocks on dangerous terminal commands.
 
+In this specific local prototype, the "AI Governor" doesn't read your mind through magic; it relies on a Self-Reported Feedback Loop.
+Here is how the data flows from the human to the decision engine:
+1. How Data is Collected
+In the app.py file provided, the information is collected via interactive UI elements (Streamlit sliders).
+ * Manual Inputs: The user explicitly moves sliders for Energy, Stress, and Workload (scales of 1–10) before requesting a task.
+   
+ * Identity Injection: The user types their core values (e.g., "I don't work after 6 PM") into the Identity Memory field.
+   
+ * 
+2. How the Agent "Knows" (The Logic)
+Once you hit "Run Governance Check," the values from those sliders are passed into the human_state.py logic.
+The Burnout Calculation
+The agent uses a weighted mathematical formula to determine your "state of mind":
 
+# From human_state.py
+score = (stress * 0.4) + (workload * 0.3) + ((10 - energy) * 0.3)
+
+ * High Weight on Stress: Stress affects the score the most (0.4).
+ * Inverse Energy: If your energy is 2/10, the formula treats it as an 8/10 risk factor ((10 - 2) * 0.3).
+If the final score is > 7, the Metronisys Governor concludes you are in a "High Burnout" state and automatically triggers a BLOCK on any new tasks, regardless of what Moltbot wants to do.
+
+3. Real-World Scaling (The "V2" Vision)
+In a production version of Metronisys, we wouldn't just use sliders. We would integrate Passive Data Collection:
+
+| Data Source | Metric Tracked |
+|---|---|
+| Calendar API | Number of back-to-back meetings (Workload) |
+| Screen Time/Input | Typing speed and cadence changes (Stress/Fatigue) |
+| Wearables (Oura/Apple Watch) | Heart Rate Variability (HRV) and Sleep scores (Energy) |
+| Sentiment Analysis | Tone of your recent Slack/Email messages (State of Mind) 
+
+4. Why This Matters for Governance
+Most AI agents (like a standard GPT or Moltbot) are "Compliance-First"—if you tell them to do 100 tasks at 2 AM, they will try to do them.
+
+Metronisys is "Human-First." By quantifying your state of mind, the Governor creates a Safety Buffer between your ambition (which might lead to burnout) and the AI's infinite execution speed.
