@@ -6,7 +6,7 @@ Metronisys general example assets
 Commercial use of the name requires permission. 
 Open-source repos may be used freely under their respective licenses.
 
-##Implementation Example OpenClaw MoltBot
+## Implementation Example OpenClaw MoltBot
 
 [Example implementation](./openclaw-moltbot.md.md)
 
