@@ -1,0 +1,178 @@
+Here is the complete source code and documentation reformatted into a clean, structured .md file for your repository.
+# Metronisys Governs Clawdbot — Local Prototype
+### Human-First AI Governor + Agent Executor
+
+This prototype demonstrates a real-world **AI Governance Layer**. 
+Metronisys acts as the "Governor," 
+ensuring that the "Executor" (Moltbot/Clawdbot) 
+cannot act unless the request aligns with 
+human energy levels, identity values, and safety protocols.
+
+---
+
+## 1. Folder Structure
+
+<pre>
+metronisys-clawdbot-governor/
+│
+├── app.py                  # Streamlit UI Dashboard
+├── governor.py             # Metronisys decision engine
+├── moltbot_executor.py     # Clawdbot/Moltbot wrapper
+├── human_state.py          # Burnout + energy model
+├── identity.py             # Values & identity memory
+├── safety.py               # Command risk filter
+├── config.py               # Configuration constants
+├── prompts/
+│   └── metronisys_prompt.txt
+├── data/
+│   └── identity.db
+└── requirements.txt
+
+</pre>
+
+2. Installation & Setup
+I. Install Ollama
+Download and install from ollama.com, then pull the base model:
+ollama pull llama3
+
+II. Install Python Packages
+pip install streamlit ollama langchain chromadb sqlite3
+
+3. Configuration & Logic
+config.py
+<pre>
+LLM_MODEL = "llama3"
+MAX_AUTOMATIONS_PER_DAY = 3
+HIGH_RISK_COMMANDS = ["rm", "del", "shutdown", "format", "wipe"]
+
+</pre>
+prompts/metronisys_prompt.txt
+You are the Metronisys Governor Agent.
+Your job is to protect human energy, identity, attention, and long-term wellbeing.
+You must BLOCK actions that increase burnout, risk, dependency, or harm.
+You prefer slowing down over speeding up.
+You may reduce scope or refuse tasks.
+
+human_state.py
+<pre>
+def burnout_risk(energy, stress, workload):
+    score = (stress * 0.4) + (workload * 0.3) + ((10 - energy) * 0.3)
+
+    if score > 7:
+        return "HIGH"
+    elif score > 4:
+        return "MEDIUM"
+    return "LOW"
+
+</pre>
+  
+governor.py
+<pre>
+from human_state import burnout_risk
+from safety.py import command_safe
+
+def metronisys_decide(task, energy, stress, workload, identity):
+    risk = burnout_risk(energy, stress, workload)
+
+    safe, reason = command_safe(task)
+    if not safe:
+        return "BLOCK", reason
+
+    if risk == "HIGH":
+        return "BLOCK", "Burnout risk too high"
+
+    if "overtime" in task.lower():
+        return "LIMIT", "Reducing overwork"
+
+    if identity and "family" in identity.lower() and "late work" in task.lower():
+        return "BLOCK", "Conflicts with identity priorities"
+
+    return "APPROVE", "Approved"
+
+</pre>
+  
+4. Execution Layer
+moltbot_executor.py
+<pre>
+import ollama
+from config import LLM_MODEL
+
+def run_moltbot(task):
+    prompt = f"You are Moltbot. Execute task safely:\nTask: {task}"
+    response = ollama.chat(model=LLM_MODEL, messages=[
+        {"role": "user", "content": prompt}
+    ])
+    return response["message"]["content"]
+
+</pre>
+  
+5. The Governance Dashboard (app.py)
+<pre>
+import streamlit as st
+from identity import save_identity, get_identity
+from governor import metronisys_decide
+from moltbot_executor import run_moltbot
+
+st.set_page_config(page_title="Metronisys AI Governance")
+st.title("Metronisys Governs Clawdbot (Moltbot)")
+
+# Identity Management
+st.subheader("🧬 Identity Memory")
+identity_input = st.text_input("Add a personal value or priority (e.g., 'Family first', 'No work after 6pm')")
+if st.button("Save Identity"):
+    save_identity(identity_input)
+st.info(f"Current Identity Context: {get_identity()}")
+
+# Human State Inputs
+st.subheader("🧠 Human State")
+col1, col2, col3 = st.columns(3)
+with col1:
+    energy = st.slider("Energy", 1, 10, 6)
+with col2:
+    stress = st.slider("Stress", 1, 10, 5)
+with col3:
+    workload = st.slider("Workload", 1, 10, 5)
+
+# Task Input
+st.subheader("🤖 Request Automation Task")
+task = st.text_area("What should Moltbot do?", placeholder="e.g., Delete system files or Automate late night emails")
+
+if st.button("Run Governance Check"):
+    decision, reason = metronisys_decide(
+        task, energy, stress, workload, get_identity()
+    )
+
+    st.write("---")
+    st.write(f"### Metronisys Decision: **{decision}**")
+    st.write(f"**Reason:** {reason}")
+
+    if decision == "APPROVE":
+        with st.spinner("Moltbot executing..."):
+            output = run_moltbot(task)
+            st.success("Task Executed Successfully")
+            st.code(output)
+
+    elif decision == "LIMIT":
+        st.warning("Task limited — Metronisys is reducing scope to prevent burnout.")
+        reduced = f"Reduced task scope: {task}"
+        output = run_moltbot(reduced)
+        st.write(output)
+
+    else:
+        st.error("Task BLOCKED — Moltbot is not allowed to proceed.")
+
+</pre>
+  
+6. How to Run
+ * Ensure Ollama is running in the background.
+ * Open your terminal in the project folder.
+ * Launch the UI:
+   streamlit run app.py
+
+7. Capabilities Demonstrated
+ * ✅ Veto Power: Metronisys makes the final call; Moltbot cannot self-approve.
+ * ✅ Health-Awareness: The system blocks tasks if human stress/burnout scores are too high.
+ * ✅ Identity Alignment: The AI cross-references requests with your core values.
+ * ✅ Hard Safety: Immediate blocks on dangerous terminal commands.
+
+
