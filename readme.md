@@ -8,7 +8,7 @@ Open-source repos may be used freely under their respective licenses.
 
 ## Implementation Example OpenClaw MoltBot
 
-[Example implementation](./openclaw-moltbot.md.md)
+[Example implementation](./openclaw-moltbot.md)
 
 
 ## Features
