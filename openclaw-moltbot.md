@@ -91,13 +91,12 @@ def metronisys_decide(task, energy, stress, workload, identity):
 
 </pre>
   
-4. Execution Layer
-moltbot_executor.py
+4. Execution Layer openclaw_executor.py
 <pre>
 import ollama
 from config import LLM_MODEL
 
-def run_moltbot(task):
+def run_openclaw(task):
     prompt = f"You are OpenClaw. Execute task safely:\nTask: {task}"
     response = ollama.chat(model=LLM_MODEL, messages=[
         {"role": "user", "content": prompt}
@@ -147,8 +146,8 @@ if st.button("Run Governance Check"):
     st.write(f"**Reason:** {reason}")
 
     if decision == "APPROVE":
-        with st.spinner("Moltbot executing..."):
-            output = run_moltbot(task)
+        with st.spinner("OpenClaw executing..."):
+            output = run_openclaw(task)
             st.success("Task Executed Successfully")
             st.code(output)
 
@@ -159,7 +158,7 @@ if st.button("Run Governance Check"):
         st.write(output)
 
     else:
-        st.error("Task BLOCKED — Moltbot is not allowed to proceed.")
+        st.error("Task BLOCKED — OpenClaw is not allowed to proceed.")
 
 </pre>
   
@@ -170,7 +169,7 @@ if st.button("Run Governance Check"):
    streamlit run app.py
 
 7. Capabilities Demonstrated
- * ✅ Veto Power: Metronisys makes the final call; Moltbot cannot self-approve.
+ * ✅ Veto Power: Metronisys makes the final call; OpenClaw cannot self-approve.
  * ✅ Health-Awareness: The system blocks tasks if human stress/burnout scores are too high.
  * ✅ Identity Alignment: The AI cross-references requests with your core values.
  * ✅ Hard Safety: Immediate blocks on dangerous terminal commands.
@@ -194,7 +193,7 @@ score = (stress * 0.4) + (workload * 0.3) + ((10 - energy) * 0.3)
 
  * High Weight on Stress: Stress affects the score the most (0.4).
  * Inverse Energy: If your energy is 2/10, the formula treats it as an 8/10 risk factor ((10 - 2) * 0.3).
-If the final score is > 7, the Metronisys Governor concludes you are in a "High Burnout" state and automatically triggers a BLOCK on any new tasks, regardless of what Moltbot wants to do.
+If the final score is > 7, the Metronisys Governor concludes you are in a "High Burnout" state and automatically triggers a BLOCK on any new tasks, regardless of what OpenClaw wants to do.
 
 3. Real-World Scaling (The "V2" Vision)
 In a production version of Metronisys, we wouldn't just use sliders. We would integrate Passive Data Collection:
