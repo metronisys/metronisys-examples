@@ -7,6 +7,9 @@ ensuring that the AI Agent "Executor" (eg OpenClaw/Moltbot/Clawdbot)
 cannot act unless the request aligns with 
 human energy levels, identity values, and safety protocols.
 
+##Important:
+Read the OpenClaw Security Best Practices section below (end).
+
 ---
 
 ## 1. Folder Structure
@@ -214,3 +217,38 @@ In a production version of Metronisys, we wouldn't just use sliders. We would in
 Most AI agents (like a standard GPT or Moltbot) are "Compliance-First"—if you tell them to do 100 tasks at 2 AM, they will try to do them.
 
 Metronisys is "Human-First." By quantifying your state of mind, the Governor creates a Safety Buffer between your ambition (which might lead to burnout) and the AI's infinite execution speed.
+
+## 🛡️ OpenClaw Security Best Practices
+
+When granting an AI agent the ability to execute code, manage files, or interact with your local environment, security must be your primary concern. OpenClaw acts as a bridge between a Large Language Model (LLM) and your system; if unsecured, a "hallucination" or an injection attack could lead to unintended system changes.
+
+---
+
+### 1. Isolation via Containerization (Docker)
+For testing experimental scripts, new skills, or complex automation, **run OpenClaw in a containerized environment.** * **Sandbox Protection:** Docker isolates the agent from your host OS. If the agent executes a destructive command like `rm -rf /`, it will only affect the temporary container, not your actual machine.
+* **Volatile Sessions:** You can spin up a fresh environment for every task, ensuring that no persistent changes or "malware" remain on your system.
+
+### 2. The Principle of Least Privilege
+**Never grant OpenClaw `sudo` or Administrator privileges.** * **The Risk:** A skill running with root access can bypass system protections, modify kernel settings, or access encrypted sensitive data (like SSH keys or password databases).
+* **The Standard:** Most tasks (writing code, organizing folders, API interactions) can be performed by a standard user account. If a skill requires `sudo`, audit the underlying script manually before every run.
+
+### 3. Read-Only Filesystem Access
+When the agent only needs to analyze data or "understand" a codebase without making changes, use a **Read-Only** configuration. This prevents accidental deletion or modification of source files.
+
+**Configuration Example:**
+Ensure your filesystem skill is restricted to `READ` operations only:
+
+| Feature | Configuration |
+| :--- | :--- |
+| **Permission Level** | `READ_ONLY` |
+| **Allowed Paths** | `/project/src`, `/docs` |
+| **Blocked Paths** | `/etc`, `~/.ssh`, `~/.env` |
+
+### 4. Human-in-the-Loop (HITL) Verification
+Always keep the **"Request Permission"** flag enabled for sensitive operations. 
+
+* **Shell Execution:** The agent must ask for explicit confirmation before running any CLI command.
+* **Final Review:** You serve as the final firewall. If a generated command looks suspicious or overly broad (e.g., using `> /` or `chmod 777`), you can deny the request.
+
+---
+
