@@ -1,10 +1,10 @@
 Here is the complete source code and documentation reformatted into a clean, structured .md file for your repository.
-# Metronisys Governs Clawdbot — Local Prototype
+# Metronisys Governs OpenClaw — Local Prototype
 ### Human-First AI Governor + Agent Executor
 
 This prototype demonstrates a real-world **AI Governance Layer**. 
 Metronisys acts as the "Governor," 
-ensuring that the "Executor" (Moltbot/Clawdbot) 
+ensuring that the "Executor" (OpenClaw/Moltbot/Clawdbot) 
 cannot act unless the request aligns with 
 human energy levels, identity values, and safety protocols.
 
@@ -17,7 +17,7 @@ metronisys-clawdbot-governor/
 │
 ├── app.py                  # Streamlit UI Dashboard
 ├── governor.py             # Metronisys decision engine
-├── moltbot_executor.py     # Clawdbot/Moltbot wrapper
+├── openclaw_executor.py     # OpenClaw/Clawdbot/Moltbot wrapper
 ├── human_state.py          # Burnout + energy model
 ├── identity.py             # Values & identity memory
 ├── safety.py               # Command risk filter
@@ -98,7 +98,7 @@ import ollama
 from config import LLM_MODEL
 
 def run_moltbot(task):
-    prompt = f"You are Moltbot. Execute task safely:\nTask: {task}"
+    prompt = f"You are OpenClaw. Execute task safely:\nTask: {task}"
     response = ollama.chat(model=LLM_MODEL, messages=[
         {"role": "user", "content": prompt}
     ])
@@ -111,10 +111,10 @@ def run_moltbot(task):
 import streamlit as st
 from identity import save_identity, get_identity
 from governor import metronisys_decide
-from moltbot_executor import run_moltbot
+from openclaw_executor import run_openclaw
 
 st.set_page_config(page_title="Metronisys AI Governance")
-st.title("Metronisys Governs Clawdbot (Moltbot)")
+st.title("Metronisys Governs OpenClaw (ClawdBot/Moltbot)")
 
 # Identity Management
 st.subheader("🧬 Identity Memory")
