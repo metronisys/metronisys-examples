@@ -12,7 +12,7 @@ human energy levels, identity values, and safety protocols.
 ## 1. Folder Structure
 
 <pre>
-metronisys-clawdbot-governor/
+metronisys-openclaw-governor/
 │
 ├── app.py                  # Streamlit UI Dashboard
 ├── governor.py             # Metronisys decision engine
