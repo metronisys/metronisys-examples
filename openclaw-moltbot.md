@@ -3,7 +3,7 @@
 
 This prototype demonstrates a real-world **AI Governance Layer**. 
 Metronisys acts as the "Governor," 
-ensuring that the "Executor" (OpenClaw/Moltbot/Clawdbot) 
+ensuring that the AI Agent "Executor" (eg OpenClaw/Moltbot/Clawdbot) 
 cannot act unless the request aligns with 
 human energy levels, identity values, and safety protocols.
 
