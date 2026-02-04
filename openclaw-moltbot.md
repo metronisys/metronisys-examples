@@ -190,7 +190,7 @@ Once you hit "Run Governance Check," the values from those sliders are passed in
 The Burnout Calculation
 The agent uses a weighted mathematical formula to determine your "state of mind":
 
-# From human_state.py
+From human_state.py
 
 score = (stress * 0.4) + (workload * 0.3) + ((10 - energy) * 0.3)
 
