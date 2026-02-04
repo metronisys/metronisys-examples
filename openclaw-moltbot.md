@@ -191,6 +191,7 @@ The Burnout Calculation
 The agent uses a weighted mathematical formula to determine your "state of mind":
 
 # From human_state.py
+
 score = (stress * 0.4) + (workload * 0.3) + ((10 - energy) * 0.3)
 
  * High Weight on Stress: Stress affects the score the most (0.4).
@@ -198,6 +199,7 @@ score = (stress * 0.4) + (workload * 0.3) + ((10 - energy) * 0.3)
 If the final score is > 7, the Metronisys Governor concludes you are in a "High Burnout" state and automatically triggers a BLOCK on any new tasks, regardless of what OpenClaw wants to do.
 
 3. Real-World Scaling (The "V2" Vision)
+
 In a production version of Metronisys, we wouldn't just use sliders. We would integrate Passive Data Collection:
 
 | Data Source | Metric Tracked |
@@ -208,6 +210,7 @@ In a production version of Metronisys, we wouldn't just use sliders. We would in
 | Sentiment Analysis | Tone of your recent Slack/Email messages (State of Mind) 
 
 4. Why This Matters for Governance
+
 Most AI agents (like a standard GPT or Moltbot) are "Compliance-First"—if you tell them to do 100 tasks at 2 AM, they will try to do them.
 
 Metronisys is "Human-First." By quantifying your state of mind, the Governor creates a Safety Buffer between your ambition (which might lead to burnout) and the AI's infinite execution speed.
