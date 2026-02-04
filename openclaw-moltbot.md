@@ -1,4 +1,3 @@
-Here is the complete source code and documentation reformatted into a clean, structured .md file for your repository.
 # Metronisys Governs OpenClaw — Local Prototype
 ### Human-First AI Governor + Agent Executor
 
