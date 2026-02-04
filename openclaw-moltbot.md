@@ -7,7 +7,7 @@ ensuring that the AI Agent "Executor" (eg OpenClaw/Moltbot/Clawdbot)
 cannot act unless the request aligns with 
 human energy levels, identity values, and safety protocols.
 
-##Important:
+## Important:
 Read the OpenClaw Security Best Practices section below (end).
 
 ---
